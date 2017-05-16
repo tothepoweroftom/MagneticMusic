@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>IsingMusic</title>
+    <script src="libraries/p5.js" type="text/javascript"></script>
+    <script src="libraries/Tone.js" type="text/javascript"></script>
+
+    <script src="libraries/ising.js" type="text/javascript"></script>
+    <script src="libraries/p5.dom.js" type="text/javascript"></script>
+
+    <!-- <script src="libraries/p5.sound.js" type="text/javascript"></script> -->
+
+    <script src="sketch.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        canvas {
+            vertical-align: top;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='big'>
+        <center>
+            <h1>Ising simulation</h1></center>
+        <div id='ising'>
+            <canvas id='canvas' height=512 width=512></canvas>
+        </div>
+        <div id='panelcontainer'>
+            <!-- ===================  add control panel items between here ============== -->
+            <div id='panel'>
+                <!-- <pre class='code' id='label_time'>initializing</pre>
+                <pre class='code' id='label_energy'>initializing</pre>
+                <pre class='code' id='label_mag'>initializing</pre>
+                <br> -->
+                <!-- <div id='isinggraph'>
+                    <canvas id='canvas-graph' height=150 width=370></canvas>
+                </div> -->
+                <br>
+                <div>
+                    <label class='eb_label' for="temp" title="Temperature">Temperature</label>
+                    <input style='width:150px;' type="range" id="temp" min=-5 max=2 step=0.000001 value=0 oninput='update_temp()' onchange="update_temp()"></input>
+                    <span onclick='dotextbox(this.id)' class='eb_span' id="label_temp"></span>
+                    <input style='width: 80px; display: none;' id='label_temp_input' type='text' value='' onblur='undotextbox(this.id)'>
+                </div>
+                <div>
+                    <label class='eb_label' for="field" title="External field">Field</label>
+                    <input style="width:150px;" type="range" id="field" min=-5 max=5 step=0.00001 value=0.0 oninput='update_field()' onchange="update_field()"></input>
+                    <span onclick='dotextbox(this.id)' class='eb_span' id="label_field"></span>
+                    <input style='width: 80px; display: none;' id='label_field_input' type='text' value='' onblur='undotextbox(this.id)'>
+                </div>
+                <div>
+                    <label class='eb_label' for="frames" title="Samples per redraw">Sweep skip</label>
+                    <input style="width:150px;" type="range" id="frames" min=-2 max=2 step=0.00001 value=0 oninput='update_frames()' onchange="update_frames()"></input>
+                    <span onclick='dotextbox(this.id)' class='eb_span' id="label_frames"></span>
+                    <input style='width: 80px; display: none;' id='label_frames_input' type='text' value='' onblur='undotextbox(this.id)'>
+                </div>
+                <div class="withspace">
+                    <label class='eb_label' for='method'>Update method:</label>
+                    <input type='radio' name='method' onclick='update_method()' checked=true id='method_metropolis' value='metropolis'>metropolis</input>
+                    <input type='radio' name='method' onclick='update_method()' id='method_wolff' value='wolff'>wolff</input>
+                </div>
+                <div class="withspace">
+                    <label class='eb_label' for='num'>Lattice size</label>
+                    <select id='changenum' onchange='change_num()'>
+                <!-- <option value="512">512</option>
+                <option value="256" selected="selected">256</option>  -->
+                <option value="128">128</option>
+                <option value="64">64</option>
+                <option value="32">32</option>
+                <option value="16">16</option>
+            </select>
+                </div>
+                <div class="withspace">
+                    <label class='eb_label' for='num'>Graph type</label>
+                    <!--<input type='text' id='num' value=0></input>
+            <input type='button' id='changenum' value='Change' onclick='change_num()'></input>-->
+                    <select id='changegraph' onchange='change_graph()'>
+                <option value="none">none</option>
+                <option value="energy" selected='selected'>e(t)</option>
+                <option value="mag">m(t)</option>
+                <!--<option value="eavg">&lt;e&gt;(t)</option>-->
+                <!--<option value="mavg">&lt;m&gt;(t)</option>-->
+            </select>
+                </div>
+
+                <div>
+                    <center>
+                        <input type='button' id='dostep' value='Step' onclick='update_step()'></input>
+                        <input type='button' id='pause' value='Pause' onclick='update_pause()'></input>
+                        <input type='button' id='restart' value='Restart' onclick='update_restart()'></input>
+                        <input type='button' id='resetdata' value='Reset data' onclick='init_measurements()'></input>
+
+                    </center>
+                </div>
+            </div>
+
+            <!-- ==========================   and here ================================= -->
+        </div>
+        <br>
+        <br>
+
+
+
+    </div>
+</body>
+
+</html>
