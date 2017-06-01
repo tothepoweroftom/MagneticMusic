@@ -7,7 +7,7 @@ var gbuffer;
 var gbufferdata;
 
 var gboard = null;
-var gN = 128;
+var gN = 32;
 var gT = 2.26918531421;
 var gfield = 0;
 
@@ -34,22 +34,41 @@ var c;
 var ctx;
 var ctxgraph;
 var empty;
-var frameskip = 1;
+var frameskip = 0.4;
 var onefill = 0;
 var dodraw = true;
-var gh = 150;
-var gw = 370;
+var gh = 3010;
+var gw = 670;
 
 
 //TONEJS
 //the player
-var filter = new Tone.Filter(300, "bandpass").toMaster();
-filter.Q = 20;
 // filter.
-var noise = new Tone.NoiseSynth().connect(filter);
-noise.set("noise.type", "brown");
+var limiter = new Tone.Limiter(-6).toMaster();
+var pingPong = new Tone.PingPongDelay("8n", 0.4).connect(limiter);
+pingPong.wet = 0.1;
+var freeverb = new Tone.Freeverb().connect(pingPong);
+// freeverb.dampening.value = 20000;
+freeverb.roomsize = 0.9;
+var panner = new Tone.Panner(0).connect(freeverb);
+var cheby = new Tone.Chebyshev(50).connect(panner);
+cheby.order = 4;
+var synth = new Tone.MembraneSynth({
+  "pitchdecay" : 0.01,
+  "octaves" : 8,
+  "oscillator" : {
+    "type" : "sine"
+  },
+  "envelope" : {
+    "attack" : 0.001,
+    "decay" : 0.1,
+    "sustain" : 0.001,
+    "release" : 0.2,
+    "attackCurve" : "exponential"
+  }
 
-Tone.Master.volume.rampTo(0, 0.1);
+
+}).connect(cheby);
 
 
 
@@ -81,6 +100,7 @@ function init_board(N, board){
     gt = 0;
     gboard = [];
     gN = N;
+    Tone.Master.volume.rampTo(0, 0.1);
 
     if (board !== null){
         for (var i=0; i<gN*gN; i++)
@@ -140,14 +160,24 @@ function neighborCount(x, y, N, b){
         1*(b[(x-1).mod(N) + y*N] > 0);
 }
 
+function map_range(value, low1, high1, low2, high2) {
+    return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+}
+
 function update_metropolis(){
     var x = Math.floor(Math.random()*gN);
     var y = Math.floor(Math.random()*gN);
     var ind = x + y*gN;
+    var pan = map_range(x, 0, gN, -1, 1);
     var de = energy_difference(x, y, gN, gboard);
     if (de <= 0 || Math.random() < Math.exp(-de / gT)){
         gboard[ind] = -gboard[ind];
-        noise.triggerAttackRelease(0.0001);
+        // noise.triggerAttackRelease(0.1);
+        panner.pan = pan;
+        let freq = ind%15 * 20 + 100;
+
+        synth.triggerAttackRelease(freq, "16n");
+
         if (!onefill)
             put_pixel(x, y, gpx_size, gboard[x+y*gN]);
 
@@ -222,8 +252,8 @@ function update_wolff() {
 
     if ( (ds <= 0) || (Math.random() < Math.exp(-ds)) ) {
         // flip the cluster
-        noise.triggerAttackRelease(0.0001);
-
+        let freq = ind%15 * 20 + 40;
+        synth.triggerAttackRelease(freq, "8n");
         for (var ind in cluster) {
             ind = Number(ind);
             x = ind % gN;
@@ -373,15 +403,15 @@ function update_method() {
         frameskip = 2;
         frame_label.innerHTML = toFixed(frameskip,0);
         frame_slider.step = 1;
-        frame_slider.max=20;
+        frame_slider.max=5;
         frame_slider.min=1;
         frame_slider.value = frameskip;
     } else  {
         update_func = 'metropolis';
-        frameskip = Math.pow(10.,0);
+        frameskip = Math.pow(3.,0);
         frame_label.innerHTML = toFixed(1,6);
         frame_slider.step = 0.01;
-        frame_slider.max=2;
+        frame_slider.max=1;
         frame_slider.min=-2;
         frame_slider.value = 0;
     }
@@ -419,97 +449,97 @@ function update_step(){
     draw_all();
 }
 
-/*===============================================================================
- * graphing
- *=============================================================================*/
-var xaxis = 40;
-var yaxis = 5;
-function x2px(x, xmin, dx) {return ((x - xmin) / dx) * (gw - xaxis) + xaxis; }
-function y2px(y, ymin, dy) {return gh - ((y - ymin) / dy * (gh - 2*yaxis) + yaxis); }
-var graph_type = "energy";
-
-function draw_series_graph(xl, yl){
-    var xllength = xl.length;
-    var xmax, xmin, ymax, ymin;
-    xmax = ymax = -1e10; xmin = ymin = 1e10;
-    var skip = 1;//Math.floor(1+(xllength/gw));
-
-    for (var i=0; i<xllength; i+=skip){
-        if (xl[i] < xmin) xmin = xl[i];
-        if (xl[i] > xmax) xmax = xl[i];
-        if (yl[i] < ymin) ymin = yl[i];
-        if (yl[i] > ymax) ymax = yl[i];
-    }
-
-    var dx = xmax - xmin;
-    var dy = ymax - ymin;
-
-    var oom_x = Math.abs(dx)<1?Math.round(log10(dx)):Math.floor(log10(dx));
-    var oom_y = Math.abs(dy)<1?Math.round(log10(dy)):Math.floor(log10(dy));
-    var pow10_x = Math.pow(10, oom_x);
-    var pow10_y = Math.pow(10, oom_y);
-
-    var idx = Math.floor(dx / pow10_x);
-    var idy = Math.floor(dy / pow10_y);
-
-    if (idx < 1) idx = 10;
-    if (idy < 1) idy = 10;
-
-    if (idx == 1 || idx == 2)
-        idx *= 5;
-    if (idy == 1 || idy == 2)
-        idy *= 5;
-
-    xtic_major = dx/idx;
-    ytic_major = dy/idy;
-    xtic_minor = xtic_major/5;
-    ytic_minor = ytic_major/5;
-
-    /*ymin = Math.floor(ymin/ytic_major)*ytic_major;
-    ymax = Math.ceil(ymax/ytic_major)*ytic_major;*/
-
-    ctxgraph.font='12px sans-serif';
-    ctxgraph.fillStyle='rgba(0,0,0,1)';
-
-    ctxgraph.beginPath();
-    ctxgraph.moveTo(xaxis, 0);
-    ctxgraph.lineTo(xaxis, gh);
-    ctxgraph.stroke();
-
-    ctxgraph.beginPath();
-    ctxgraph.moveTo(xaxis, y2px(0, ymin, dy));
-    ctxgraph.lineTo(gw, y2px(0, ymin, dy));
-    ctxgraph.stroke();
-
-    for (var i=-idy; i<=idy; i++){
-        y = y2px(i*ytic_major+(ymin+ymax)/2, ymin, dy);
-        ctxgraph.beginPath();
-        ctxgraph.moveTo(xaxis-5, y);
-        ctxgraph.lineTo(xaxis, y);
-        ctxgraph.stroke();
-        ctxgraph.fillText(toFixed(i*ytic_major+(ymin+ymax)/2, 3), 0, y+4);
-    }
-
-    for (var i=-idy*5; i<=idy*5; i++){
-        y = y2px(i*ytic_minor+(ymin+ymax)/2, ymin, dy);
-        ctxgraph.beginPath();
-        ctxgraph.moveTo(xaxis-2, y);
-        ctxgraph.lineTo(xaxis, y);
-        ctxgraph.stroke();
-    }
-
-    for (var i=0; i<xllength-skip; i+=skip){
-        ctxgraph.beginPath();
-        ctxgraph.moveTo(x2px(xl[i], xmin, dx), y2px(yl[i], ymin, dy));
-        ctxgraph.lineTo(x2px(xl[i+skip], xmin, dx), y2px(yl[i+skip], ymin, dy));
-        ctxgraph.stroke();
-    }
-}
-
-function change_graph(){
-    graph_type = document.getElementById('changegraph').value;
-    // draw_graph();
-}
+// /*===============================================================================
+//  * graphing
+//  *=============================================================================*/
+// var xaxis = 40;
+// var yaxis = 5;
+// function x2px(x, xmin, dx) {return ((x - xmin) / dx) * (gw - xaxis) + xaxis; }
+// function y2px(y, ymin, dy) {return gh - ((y - ymin) / dy * (gh - 2*yaxis) + yaxis); }
+// var graph_type = "energy";
+//
+// function draw_series_graph(xl, yl){
+//     var xllength = xl.length;
+//     var xmax, xmin, ymax, ymin;
+//     xmax = ymax = -1e10; xmin = ymin = 1e10;
+//     var skip = 1;//Math.floor(1+(xllength/gw));
+//
+//     for (var i=0; i<xllength; i+=skip){
+//         if (xl[i] < xmin) xmin = xl[i];
+//         if (xl[i] > xmax) xmax = xl[i];
+//         if (yl[i] < ymin) ymin = yl[i];
+//         if (yl[i] > ymax) ymax = yl[i];
+//     }
+//
+//     var dx = xmax - xmin;
+//     var dy = ymax - ymin;
+//
+//     var oom_x = Math.abs(dx)<1?Math.round(log10(dx)):Math.floor(log10(dx));
+//     var oom_y = Math.abs(dy)<1?Math.round(log10(dy)):Math.floor(log10(dy));
+//     var pow10_x = Math.pow(10, oom_x);
+//     var pow10_y = Math.pow(10, oom_y);
+//
+//     var idx = Math.floor(dx / pow10_x);
+//     var idy = Math.floor(dy / pow10_y);
+//
+//     if (idx < 1) idx = 10;
+//     if (idy < 1) idy = 10;
+//
+//     if (idx == 1 || idx == 2)
+//         idx *= 5;
+//     if (idy == 1 || idy == 2)
+//         idy *= 5;
+//
+//     xtic_major = dx/idx;
+//     ytic_major = dy/idy;
+//     xtic_minor = xtic_major/5;
+//     ytic_minor = ytic_major/5;
+//
+//     /*ymin = Math.floor(ymin/ytic_major)*ytic_major;
+//     ymax = Math.ceil(ymax/ytic_major)*ytic_major;*/
+//
+//     ctxgraph.font='12px sans-serif';
+//     ctxgraph.fillStyle='rgba(0,0,0,1)';
+//
+//     ctxgraph.beginPath();
+//     ctxgraph.moveTo(xaxis, 0);
+//     ctxgraph.lineTo(xaxis, gh);
+//     ctxgraph.stroke();
+//
+//     ctxgraph.beginPath();
+//     ctxgraph.moveTo(xaxis, y2px(0, ymin, dy));
+//     ctxgraph.lineTo(gw, y2px(0, ymin, dy));
+//     ctxgraph.stroke();
+//
+//     for (var i=-idy; i<=idy; i++){
+//         y = y2px(i*ytic_major+(ymin+ymax)/2, ymin, dy);
+//         ctxgraph.beginPath();
+//         ctxgraph.moveTo(xaxis-5, y);
+//         ctxgraph.lineTo(xaxis, y);
+//         ctxgraph.stroke();
+//         ctxgraph.fillText(toFixed(i*ytic_major+(ymin+ymax)/2, 3), 0, y+4);
+//     }
+//
+//     for (var i=-idy*5; i<=idy*5; i++){
+//         y = y2px(i*ytic_minor+(ymin+ymax)/2, ymin, dy);
+//         ctxgraph.beginPath();
+//         ctxgraph.moveTo(xaxis-2, y);
+//         ctxgraph.lineTo(xaxis, y);
+//         ctxgraph.stroke();
+//     }
+//
+//     for (var i=0; i<xllength-skip; i+=skip){
+//         ctxgraph.beginPath();
+//         ctxgraph.moveTo(x2px(xl[i], xmin, dx), y2px(yl[i], ymin, dy));
+//         ctxgraph.lineTo(x2px(xl[i+skip], xmin, dx), y2px(yl[i+skip], ymin, dy));
+//         ctxgraph.stroke();
+//     }
+// }
+//
+// function change_graph(){
+//     graph_type = document.getElementById('changegraph').value;
+//     // draw_graph();
+// }
 
 function calculateFlipTable(temp){
     wolfp = 1 - Math.exp( -2./temp );
