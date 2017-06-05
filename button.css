@@ -171,273 +171,7 @@ h1:before {
 .btn-4 span:hover:before {height: 100%;}
 .btn-4 span:hover:after {width: 100%;}
 
-/**** BTN No. 5 ****/
-.btn-5 {
-  width: 130px;
-  height: 40px;
-  line-height: 42px;
-  padding: 0;
-  border: none;
-}
-.btn-5 span {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.btn-5:before, .btn-5:after {
-  position: absolute;
-  content: "";
-  right: 0;
-  bottom: 0;
-  background: #000;
-  transition: all 0.3s ease;
-}
-.btn-5:before {
-  height: 50%;
-  width: 2px;
-}
-.btn-5:after {
-  width: 20%;
-  height: 2px;
-}
-.btn-5:hover:before {height: 100%;}
-.btn-5:hover:after {width: 100%;}
-.btn-5 span:before, .btn-5 span:after {
-  position: absolute;
-  content: "";
-  left: 0;
-  top: 0;
-  background: #000;
-  transition: all 0.3s ease;
-}
-.btn-5 span:before {
-  width: 2px;
-  height: 50%;
-}
-.btn-5 span:after {
-  width: 20%;
-  height: 2px;
-}
-.btn-5 span:hover:before {height: 100%;}
-.btn-5 span:hover:after {width: 100%;}
 
-/**** BTN No. 6 ****/
-.btn-6 {
-  width: 130px;
-  height: 40px;
-  line-height: 42px;
-  padding: 0;
-  border: none;
-}
-.btn-6 span {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.btn-6:before, .btn-6:after {
-  position: absolute;
-  content: "";
-  height: 0%;
-  width: 2px;
-  background: #000;
-}
-.btn-6:before {
-  right: 0;
-  top: 0;
-  transition: all 0.1s ease;
-}
-.btn-6:after {
-  left: 0;
-  bottom: 0;
-  transition: all 0.1s 0.2s ease;
-}
-.btn-6:hover:before {
-  transition: all 0.1s 0.2s ease;
-  height: 100%;
-}
-.btn-6:hover:after {
-  transition: all 0.1s ease;
-  height: 100%;
-}
-.btn-6 span:before, .btn-6 span:after {
-  position: absolute;
-  content: "";
-  background: #000;
-}
-.btn-6 span:before {
-  left: 0;
-  top: 0;
-  width: 0%;
-  height: 2px;
-  transition: all 0.1s 0.1s ease;
-}
-.btn-6 span:after {
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 2px;
-}
-.btn-6 span:hover:before {width: 100%;}
-
-/**** BTN No. 7 ****/
-.btn-7 {
-  border: 2px solid #000;
-  transition: all 0.3s ease;
-  background: #f2f2f2;
-}
-.btn-7:before {
-  position: absolute;
-  content: ' ';
-  z-index: -1;
-  width: 25%;
-  top: 50%;
-  left: -15%;
-  height: 2px;
-  background: #000;
-  transition: all 0.3s ease;
-}
-.btn-7:hover {
-  background: #000;
-  color: #fff;
-  border-color: #000;
-  padding-left: 30px;
-  padding-right: 20px;
-}
-.btn-7:hover:before {left: -10%;}
-
-
-/**** BTN No. 8 ****/
-.btn-8 {
-  padding-left: 30px;
-  padding-right: 20px;
-  background: #f2f2f2;
-  border: 2px solid #000;
-  transition: all 0.3s ease;
-}
-.btn-8:before {
-  position: absolute;
-  content: ' ';
-  z-index: -1;
-  width: 25%;
-  top: 50%;
-  left: -10%;
-  height: 2px;
-  background: #000;
-  transition: all 0.3s ease;
-}
-.btn-8:hover {
-  background: #000;
-  color: #fff;
-  border-color: transparent;
-  padding-left: 25px;
-  padding-right: 25px;
-}
-.btn-8:hover:before {left: -15%;}
-
-/**** BTN No. 9 ****/
-.btn-9 {
-  background: #f2f2f2;
-  border: 2px solid #000;
-  transition: all 0.3s ease;
-}
-.btn-9:before, .btn-9:after {
-  position: absolute;
-  content: ' ';
-  z-index: -1;
-  width: 25%;
-  top: 50%;
-  height: 2px;
-  background: #000;
-  transition: all 0.3s ease;
-}
-.btn-9:before {left: -10%;}
-.btn-9:after {right: -10%}
-.btn-9:hover {
-  background: #000;
-  color: #fff;
-}
-.btn-9:hover:before {left: -15%;}
-.btn-9:hover:after {right: -15%;}
-
-
-/**** BTN No. 10 ****/
-.btn-10 {
-  background: #f2f2f2;
-  border: 2px solid #000;
-  transition: all 0.3s ease;
-}
-.btn-10:before, .btn-10:after {
-  position: absolute;
-  content: ' ';
-  z-index: -1;
-  width: 25%;
-  top: 50%;
-  height: 2px;
-  background: #000;
-  transition: all 0.3s ease;
-}
-.btn-10:before {left: -15%;}
-.btn-10:after {right: -15%}
-.btn-10:hover {
-  background: #000;
-  color: #fff;
-}
-.btn-10:hover:before {left: -10%;}
-.btn-10:hover:after {right: -10%;}
-
-
-/**** BTN No. 11 ****/
-.btn-11 {
-  background: #f2f2f2;
-  border: 2px solid #000;
-  transition: all 0.3s ease;
-}
-.btn-11:before, .btn-11:after {
-  position: absolute;
-  content: ' ';
-  z-index: -1;
-  width: 25%;
-  top: 50%;
-  height: 2px;
-  background: #000;
-  transition: all 0.3s ease;
-}
-.btn-11:before {left: -10%;}
-.btn-11:after {right: -10%}
-.btn-11:hover {
-  background: #000;
-  color: #fff;
-}
-.btn-11:hover:before {left: 0%;}
-.btn-11:hover:after {right: 0%;}
-
-
-/**** BTN No. 12 ****/
-.btn-12 {
-  border: 2px solid #000;
-  z-index: 1;
-}
-.btn-12:after {
-  position: absolute;
-  content: "";
-  width: 100%;
-  height: 0;
-  bottom: 0;
-  left: 0;
-  z-index: -1;
-  background: #000;
-  transition: all 0.3s ease;
-}
-.btn-12:hover {
-  color: #fff;
-}
-.btn-12:hover:after {
-  top: 0;
-  height: 100%;
-}
-.btn-12:active {top: 2px;}
 
 input:focus {
     outline:none;
@@ -489,8 +223,8 @@ input {
   position: absolute;
   top: 0;
   left: 0;
-  height: 50%;
-  width: 50%;
+  height: 100%;
+  width: 100%;
   margin: 0;
   cursor: pointer;
 }
@@ -508,8 +242,8 @@ input {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  width: 50%;
-  height: 50%;
+  width: 20px;
+  height: 20px;
   border: 2px solid #ff0000;
   border-radius: 5px;
   padding: 1rem;
@@ -532,17 +266,17 @@ input {
   color: #ff0000;
 }
 .radio-tile-group .input-container .radio-button:checked + .radio-tile {
-  background-color: #079ad9;
-  border: 2px solid #079ad9;
+  background-color: #ff0000;
+  border: 2px solid #ff0000;
   color: white;
   -webkit-transform: scale(1.1, 1.1);
           transform: scale(1.1, 1.1);
 }
 .radio-tile-group .input-container .radio-button:checked + .radio-tile .icon svg {
   fill: white;
-  background-color: #079ad9;
+  background-color: #ff0000;
 }
 .radio-tile-group .input-container .radio-button:checked + .radio-tile .radio-tile-label {
   color: white;
-  background-color: #079ad9;
+  background-color: #ff0000;
 }

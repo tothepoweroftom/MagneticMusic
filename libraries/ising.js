@@ -34,7 +34,7 @@ var c;
 var ctx;
 var ctxgraph;
 var empty;
-var frameskip = 0.4;
+var frameskip = 0.01;
 var onefill = 0;
 var dodraw = true;
 var gh = 3010;
@@ -45,16 +45,13 @@ var gw = 670;
 //the player
 // filter.
 var limiter = new Tone.Limiter(-6).toMaster();
-var pingPong = new Tone.PingPongDelay("8n", 0.4).connect(limiter);
-pingPong.wet = 0.1;
-var freeverb = new Tone.Freeverb().connect(pingPong);
-// freeverb.dampening.value = 20000;
-freeverb.roomsize = 0.9;
-var panner = new Tone.Panner(0).connect(freeverb);
-var cheby = new Tone.Chebyshev(50).connect(panner);
-cheby.order = 4;
+
+
+var panner = new Tone.Panner(0).connect(limiter);
+var cheby = new Tone.Chebyshev(2).connect(panner);
+cheby.order = 6;
 var synth = new Tone.MembraneSynth({
-  "pitchdecay" : 0.01,
+  "pitchdecay" : 0.001,
   "octaves" : 8,
   "oscillator" : {
     "type" : "sine"
@@ -175,6 +172,7 @@ function update_metropolis(){
         // noise.triggerAttackRelease(0.1);
         panner.pan = pan;
         let freq = ind%15 * 20 + 100;
+        // cheby.order = freq%25;
 
         synth.triggerAttackRelease(freq, "16n");
 
@@ -616,8 +614,19 @@ var tick = function(T) {
 };
 
 function change_num(){
-    gN = parseInt(document.getElementById('changenum').value);
+    gN = parseInt(document.getElementById('grid').value);
     init_board(gN, null);
+    console.log(gN);
+}
+function change_num2(){
+    gN = parseInt(document.getElementById('grid2').value);
+    init_board(gN, null);
+    console.log(gN);
+}
+function change_num3(){
+    gN = parseInt(document.getElementById('grid3').value);
+    init_board(gN, null);
+    console.log(gN);
 }
 
 

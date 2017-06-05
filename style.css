@@ -11,9 +11,10 @@ body {
 }
 
 #ising {
-    width: 512px;
-    height: 512px;
-    position: 'absolute';
+    width: 25%;
+    height: 25%;
+    right 25%;
+    /*position: 'absolute';*/
     /*left: 50%;*/
     top: 30px;
 }
@@ -32,22 +33,23 @@ pre.code {
 }
 
 #canvas {
-    /*left: 25%;*/
+    left: 10%;
+    background-color: purple;
 }
 
 #panelcontainer {
-    position: relative;
+    position: absolute;
     top: 100px;
-    left: 25px;
+    left: 0%;
     clear: both;
 }
 
 #panel {
     padding: 0px;
-    width: 70%;
+    width: 100%;
     right: 25%;
-    height: 50%;
-    background-color: black;
+    height: 200px;
+    background-color: red;
 }
 
 #slider {

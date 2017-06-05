@@ -44,11 +44,16 @@
     <div id='big'>
         <center>
             <h1>ISING MUSIC</h1>
-        <center>
-            <div id='ising'>
-                <canvas id='canvas' height=512 width=512></canvas>
+            <div>
+                <!-- <center> -->
+                    <!-- <input type='button' id='dostep' value='Step' onclick='update_step()'></input> -->
+                    <input type='button' class='custom-btn btn-1' id='pause' value='Pause' onclick='update_pause()'></input>
+                    <br>
+                    <input type='button' class='custom-btn btn-1' id='restart' value='Restart' onclick='update_restart()'></input>
+                    <!-- <input type='button' id='resetdata' value='Reset data' onclick='init_measurements()'></input> -->
+
+                <!-- </center> -->
             </div>
-        </center>
         <div id='panelcontainer'>
             <!-- ===================  add control panel items between here ============== -->
             <div id='panel'>
@@ -79,22 +84,13 @@
                     <input type='radio' class="radio" name='method' onclick='update_method()' checked=true id='method_metropolis' value='metropolis'>metropolis</input>
                     <input type='radio' name='method' onclick='update_method()' id='method_wolff' value='wolff'>wolff</input>
                 </div>
-                <div class="withspace">
-                    <label class='eb_label' for='num'>Lattice size</label>
-                    <select id='changenum' onchange='change_num()'>
-                <!-- <option value="512">512</option>
-                <option value="256" selected="selected">256</option>  -->
-                <!-- <option value="128">128</option> -->
-                <option value="64">64</option>
-                <option value="32">32</option>
-                <option value="16">16</option>
-            </select>
-                </div>
+                <br>
+                <label class='eb_label' for='num'>Lattice size</label>
 
                 <div class="radio-tile-group">
 
                    <div class="input-container">
-                     <input id="walk" class="radio-button" type="radio" name="radio" />
+                     <input id="grid" class="radio-button" onclick="change_num()" value = "16" type="radio" name="radio" />
                      <div class="radio-tile">
 
                        <label for="walk" class="radio-tile-label">16</label>
@@ -102,33 +98,26 @@
                    </div>
 
                    <div class="input-container">
-                     <input id="bike" class="radio-button" type="radio" name="radio" />
+                     <input id="grid2" class="radio-button" onclick = "change_num2()" value = "32" type="radio" name="radio" />
                      <div class="radio-tile">
                        <label for="bike" class="radio-tile-label">32</label>
                      </div>
                    </div>
 
                    <div class="input-container">
-                     <input id="drive" class="radio-button" type="radio" name="radio" />
+                     <input id="grid3" class="radio-button" type="radio" onclick = "change_num3()" value = "64" name="radio" />
                      <div class="radio-tile">
 
                        <label for="drive" class="radio-tile-label">64</label>
                      </div>
                    </div>
 
-
+                       <div id='ising'>
+                           <canvas id='canvas' height=512 width=512></canvas>
+                       </div>
 
                  </div>
-                <div>
-                    <!-- <center> -->
-                        <!-- <input type='button' id='dostep' value='Step' onclick='update_step()'></input> -->
-                        <input type='button' class='custom-btn btn-1' id='pause' value='Pause' onclick='update_pause()'></input>
-                        <br>
-                        <input type='button' class='custom-btn btn-1' id='restart' value='Restart' onclick='update_restart()'></input>
-                        <!-- <input type='button' id='resetdata' value='Reset data' onclick='init_measurements()'></input> -->
 
-                    <!-- </center> -->
-                </div>
             </div>
 
             <!-- ==========================   and here ================================= -->
