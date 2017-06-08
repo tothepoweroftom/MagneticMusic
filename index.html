@@ -44,89 +44,100 @@
     <div id='big'>
         <center>
             <h1>ISING MUSIC</h1>
-            <div>
-                <!-- <center> -->
-                    <!-- <input type='button' id='dostep' value='Step' onclick='update_step()'></input> -->
-                    <input type='button' class='custom-btn btn-1' id='pause' value='Pause' onclick='update_pause()'></input>
+            <center>
+                <div id='ising'>
+                    <canvas id='canvas' height=512 width=512></canvas>
+                </div>
+            </center>
+
+
+
+            <div id='panelcontainer'>
+                <!-- ===================  add control panel items between here ============== -->
+                <div id='panel'>
+                    <!-- <br> -->
+                    <div>
+                        <!-- <center> -->
+                        <!-- <input type='button' id='dostep' value='Step' onclick='update_step()'></input> -->
+                        <input type='button' class='custom-btn btn-1' id='pause' value='Pause' onclick='update_pause()'></input>
+                        <input type='button' class='custom-btn btn-1' id='restart' value='Restart' onclick='update_restart()'></input>
+                        <!-- <input type='button' id='resetdata' value='Reset data' onclick='init_measurements()'></input> -->
+
+                        <!-- </center> -->
+                    </div>
                     <br>
-                    <input type='button' class='custom-btn btn-1' id='restart' value='Restart' onclick='update_restart()'></input>
-                    <!-- <input type='button' id='resetdata' value='Reset data' onclick='init_measurements()'></input> -->
+                    <div>
+                        <input style='width:150px;' type="range" å id="temp" min=-5 max=2 step=0.000001 value=0 oninput='update_temp()' onchange="update_temp()"></input>
+                        <label class='eb_label' for="temp" title="Temperature">Temperature</label>
+                        <br>
 
-                <!-- </center> -->
-            </div>
-        <div id='panelcontainer'>
-            <!-- ===================  add control panel items between here ============== -->
-            <div id='panel'>
-                <!-- <br> -->
-                <div>
-                    <input style='width:150px;' type="range"å id="temp" min=-5 max=2 step=0.000001 value=0 oninput='update_temp()' onchange="update_temp()"></input>
-                    <label class='eb_label' for="temp" title="Temperature">Temperature</label>
+                        <span hidden onclick='dotextbox(this.id)' class='eb_span' id="label_temp"></span>
+                        <input hidden style='width: 1px; display: none;' id='label_temp_input' type='text' value='' onblur='undotextbox(this.id)'>
+                    </div>
+                    <div>
+                        <input style="width:150px;" type="range" id="field" min=-5 max=5 step=0.00001 value=0.0 oninput='update_field()' onchange="update_field()"></input>
 
-                    <span onclick='dotextbox(this.id)' class='eb_span' id="label_temp"></span>
-                    <input style='width: 80px; display: none;' id='label_temp_input' type='text' value='' onblur='undotextbox(this.id)'>
-                </div>
-                <div>
-                    <input style="width:150px;" type="range" id="field" min=-5 max=5 step=0.00001 value=0.0 oninput='update_field()' onchange="update_field()"></input>
-                    <label class='eb_label' for="field" title="External field">Field </label>
+                        <label class='eb_label' for="field" title="External field">Magnetism </label>
+                        <br>
 
-                    <span onclick='dotextbox(this.id)' class='eb_span' id="label_field"></span>
-                    <input style='width: 80px; display: none;' id='label_field_input' type='text' value='' onblur='undotextbox(this.id)'>
-                </div>
-                <div>
-                    <input style="width:150px;" type="range" id="frames" min=-2 max=0.7 step=0.00001 value=0 oninput='update_frames()' onchange="update_frames()"></input>
-                    <label class='eb_label' for="frames" title="Samples per redraw">Sweep skip</label>
+                        <span hidden onclick='dotextbox(this.id)' class='eb_span' id="label_field"></span>
+                        <input hidden style='width: 1px; display: none;' id='label_field_input' type='text' value='' onblur='undotextbox(this.id)'>
+                    </div>
+                    <div>
+                        <input style="width:150px;" type="range" id="frames" min=-2 max=0.7 step=0.00001 value=0 oninput='update_frames()' onchange="update_frames()"></input>
 
-                    <span onclick='dotextbox(this.id)' class='eb_span' id="label_frames"></span>
-                    <input style='width: 80px; display: none;' id='label_frames_input' type='text' value='' onblur='undotextbox(this.id)'>
-                </div>
-                <div class="withspace">
-                    <label class='eb_label' for='method'>Update method:</label>
-                    <input type='radio' class="radio" name='method' onclick='update_method()' checked=true id='method_metropolis' value='metropolis'>metropolis</input>
-                    <input type='radio' name='method' onclick='update_method()' id='method_wolff' value='wolff'>wolff</input>
+                        <label class='eb_label' for="frames" title="Samples per redraw">Speed</label>
+                        <br>
+
+                        <span hidden onclick='dotextbox(this.id)' class='eb_span' id="label_frames"></span>
+                        <input hidden style='width: 1px; display: none;' id='label_frames_input' type='text' value='' onblur='undotextbox(this.id)'>
+                    </div>
+                    <div class="withspace">
+                        <label class='eb_label' for='method'>Algorithm</label>
+                        <input type='radio' class="radio" name='method' onclick='update_method()' checked=true id='method_metropolis' value='metropolis'>metropolis</input>
+                        <input type='radio' name='method' onclick='update_method()' id='method_wolff' value='wolff'>wolff</input>
+                    </div>
+
+                    <input type='button' name="radio" class='custom-btn btn-1' id='grid' value='16' onclick='change_num()'></input>
+                    <input type='button' name="radio" class='custom-btn btn-1' id='grid2' value='32' onclick='change_num2()'></input>
+                    <input type='button' name="radio" class='custom-btn btn-1' id='grid3' value='64' onclick='change_num3()'></input>
+
+
+                    <!-- <div class="radio-tile-group">
+                        <label class='eb_label' for='num'>Lattice size</label>
+                        <div class="input-container">
+                            <input id="grid" class="radio-button" onclick="change_num()" value="16" type="radio" name="radio" />
+                            <div class="radio-tile">
+                                <label for="walk" class="radio-tile-label">16</label>
+                            </div>
+                        </div>
+
+                        <div class="input-container">
+                            <input id="grid2" class="radio-button" onclick="change_num2()" value="32" type="radio" name="radio" />
+                            <div class="radio-tile">
+                                <label for="bike" class="radio-tile-label">32</label>
+                            </div>
+                        </div>
+
+                        <div class="input-container">
+                            <input id="grid3" class="radio-button" type="radio" onclick="change_num3()" value="64" name="radio" />
+                            <div class="radio-tile">
+
+                                <label for="drive" class="radio-tile-label">64</label>
+                            </div>
+                        </div>
+
+
+
+                    </div> -->
+                    <!-- ==========================   and here ================================= -->
                 </div>
                 <br>
-                <label class='eb_label' for='num'>Lattice size</label>
+                <br>
 
-                <div class="radio-tile-group">
 
-                   <div class="input-container">
-                     <input id="grid" class="radio-button" onclick="change_num()" value = "16" type="radio" name="radio" />
-                     <div class="radio-tile">
-
-                       <label for="walk" class="radio-tile-label">16</label>
-                     </div>
-                   </div>
-
-                   <div class="input-container">
-                     <input id="grid2" class="radio-button" onclick = "change_num2()" value = "32" type="radio" name="radio" />
-                     <div class="radio-tile">
-                       <label for="bike" class="radio-tile-label">32</label>
-                     </div>
-                   </div>
-
-                   <div class="input-container">
-                     <input id="grid3" class="radio-button" type="radio" onclick = "change_num3()" value = "64" name="radio" />
-                     <div class="radio-tile">
-
-                       <label for="drive" class="radio-tile-label">64</label>
-                     </div>
-                   </div>
-
-                       <div id='ising'>
-                           <canvas id='canvas' height=512 width=512></canvas>
-                       </div>
-
-                 </div>
 
             </div>
-
-            <!-- ==========================   and here ================================= -->
-        </div>
-        <br>
-        <br>
-
-
-
     </div>
 </body>
 

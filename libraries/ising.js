@@ -1,7 +1,7 @@
 // all of the global variables for dynamics
 var gpx_black = null;
 var gpx_white = null;
-var gpx_size = 0;
+var gpx_size = 1;
 var canvasN = 512;
 var gbuffer;
 var gbufferdata;
@@ -37,8 +37,8 @@ var empty;
 var frameskip = 0.01;
 var onefill = 0;
 var dodraw = true;
-var gh = 3010;
-var gw = 670;
+var gh = 512;
+var gw = 512;
 
 
 //TONEJS
@@ -46,10 +46,9 @@ var gw = 670;
 // filter.
 var limiter = new Tone.Limiter(-6).toMaster();
 
-
 var panner = new Tone.Panner(0).connect(limiter);
 var cheby = new Tone.Chebyshev(2).connect(panner);
-cheby.order = 6;
+cheby.order = 2;
 var synth = new Tone.MembraneSynth({
   "pitchdecay" : 0.001,
   "octaves" : 8,
@@ -57,16 +56,15 @@ var synth = new Tone.MembraneSynth({
     "type" : "sine"
   },
   "envelope" : {
-    "attack" : 0.001,
-    "decay" : 0.1,
-    "sustain" : 0.001,
+    "attack" : 0.01,
+    "decay" : 0.01,
+    "sustain" : 0.1,
     "release" : 0.2,
     "attackCurve" : "exponential"
   }
 
 
 }).connect(cheby);
-
 
 
 
@@ -171,7 +169,7 @@ function update_metropolis(){
         gboard[ind] = -gboard[ind];
         // noise.triggerAttackRelease(0.1);
         panner.pan = pan;
-        let freq = ind%15 * 20 + 100;
+        let freq = ind%15 * 20 + 200;
         // cheby.order = freq%25;
 
         synth.triggerAttackRelease(freq, "16n");
@@ -693,13 +691,6 @@ var init = function() {
     clear();
     init_board(gN, null);
     update_display();
-
-    document.body.addEventListener('keyup', function(ev) {
-        if (ev.keyCode == 32){ ev.preventDefault(); update_pause(); } //space is pause
-    }, false);
-
-    document.body.addEventListener('keydown', function(ev) {
-    }, false);
 
     registerAnimationRequest();
     requestAnimationFrame(tick, c);
