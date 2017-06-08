@@ -67,7 +67,11 @@ var synth = new Tone.MembraneSynth({
 }).connect(cheby);
 
 
+function dismissDiv(){
+  document.getElementById("loading").style.display = 'none';
+  StartAudioContext(Tone.context, "#loading");
 
+}
 
 
 
