@@ -87,6 +87,18 @@ pre.code {
     color: white;
 }
 
+h5 {
+  font: 150 13px/15px Roboto, sans-serif;
+  color: white;
+  text-align: left;
+
+}
+
+#speel {
+  position: absolute;
+  left : 25px;
+}
+
 /*Chrome*/
 @media screen and (-webkit-min-device-pixel-ratio:0) {
     input[type='range'] {

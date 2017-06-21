@@ -39,28 +39,32 @@ var onefill = 0;
 var dodraw = false;
 var gh = 512;
 var gw = 512;
+var gJ = 1.0;
 
 
 //TONEJS
 //the player
 // filter.
-var limiter = new Tone.Limiter(-6).toMaster();
+var limiter = new Tone.Limiter(-3).toMaster();
+var chorus = new Tone.Chorus(4, 2.5, 0.5).connect(limiter);
+var autoFilter = new Tone.AutoFilter("2n").connect(chorus);
+var panner = new Tone.Panner(0).connect(autoFilter);
+var dist = new Tone.Distortion(0.3).connect(panner);
 
-var panner = new Tone.Panner(0).connect(limiter);
-var cheby = new Tone.Chebyshev(2).connect(panner);
-cheby.order = 2;
+var cheby = new Tone.Chebyshev(2).connect(dist);
+cheby.order = 3;
 var synth = new Tone.MembraneSynth({
-  "pitchdecay" : 0.001,
+  "pitchdecay" : 0.1,
   "octaves" : 8,
   "oscillator" : {
-    "type" : "square"
+    "type" : "sine"
   },
   "envelope" : {
     "attack" : 0.01,
     "decay" : 0.01,
     "sustain" : 0.1,
     "release" : 0.2,
-    "attackCurve" : "exponential"
+    "attackCurve" : "linear"
   }
 
 
@@ -142,7 +146,7 @@ function display_board(N, board){
 }
 
 function energy(x, y, N, b){
-    return -b[x+y*N]*(b[x + ((y+1).mod(N))*N] +
+    return gJ*b[x+y*N]*(b[x + ((y+1).mod(N))*N] +
         b[x + ((y-1).mod(N))*N] +
         b[(x+1).mod(N) + y*N] +
         b[(x-1).mod(N) + y*N] + gfield);
@@ -175,15 +179,17 @@ function update_metropolis(){
         gboard[ind] = -gboard[ind];
         // noise.triggerAttackRelease(0.1);
         panner.pan = pan;
-        let freq = ind%15 * 20 + 200;
+        let freq = (ind)%30 + 80;
         // cheby.order = freq%25;
 
-        synth.triggerAttackRelease(freq, "16n");
+        synth.triggerAttackRelease(freq, "8n");
 
         if (!onefill)
             put_pixel(x, y, gpx_size, gboard[x+y*gN]);
 
         genergy += 1.0*de/(gN*gN);
+
+
         gmag += 2.0*gboard[ind]/(gN*gN);
     }
     gt += 1.0/(gN*gN);
@@ -371,6 +377,14 @@ function update_temp(){
     else
         gT = Math.pow(10, gTval);
     document.getElementById('label_temp').innerHTML = toFixed(gT,6);
+    calculateFlipTable(gT);
+}
+
+function update_interaction(){
+    min = document.getElementById('interaction').min;
+    gJ = parseFloat(document.getElementById('interaction').value)
+    console.log(gJ);
+    // document.getElementById('label_temp').innerHTML = toFixed(gT,6);
     calculateFlipTable(gT);
 }
 function update_field(){
