@@ -36,7 +36,7 @@ var ctxgraph;
 var empty;
 var frameskip = 0.01;
 var onefill = 0;
-var dodraw = true;
+var dodraw = false;
 var gh = 512;
 var gw = 512;
 
@@ -53,7 +53,7 @@ var synth = new Tone.MembraneSynth({
   "pitchdecay" : 0.001,
   "octaves" : 8,
   "oscillator" : {
-    "type" : "sine"
+    "type" : "square"
   },
   "envelope" : {
     "attack" : 0.01,
@@ -68,12 +68,14 @@ var synth = new Tone.MembraneSynth({
 
 
 function dismissDiv(){
+  update_pause();
   document.getElementById("loading").style.display = 'none';
   StartAudioContext(Tone.context, "#loading");
 
 }
 
 
+setTimeout(dismissDiv, 2000);
 
 function rgb(r,g,b) {
     return 'rgb('+r+','+g+','+b+')';

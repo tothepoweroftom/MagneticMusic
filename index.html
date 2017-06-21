@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title style="color:white;">IsingMusic</title>
+    <title style="color:white;">Magnetic Music</title>
     <script src="libraries/p5.js" type="text/javascript"></script>
     <script src="libraries/Tone.js" type="text/javascript"></script>
     <script src="libraries/StartAudioContext.js" type="text/javascript"></script>
@@ -42,10 +42,10 @@
 
 <body>
 
-  <div class="loading" id="loading" onclick="dismissDiv()">Loading&#8230; <p>Click/tap to dismiss</p></div>
+  <div class="loading" id="loading" onclick="dismissDiv()">Loading&#8230; <p>Click/tap to dismiss</p> <div style="color:black;"> Click to dismiss</div></div>
     <div id='big'>
         <center>
-            <h1>ISING MUSIC</h1>
+            <h1>MAGNETIC MUSIC</h1>
             <center>
                 <div id='ising'>
                     <canvas id='canvas' height=512 width=512></canvas>
@@ -69,7 +69,7 @@
                     </div>
                     <br>
                     <div>
-                        <input style='width:150px;' type="range" å id="temp" min=-5 max=2 step=0.000001 value=0 oninput='update_temp()' onchange="update_temp()"></input>
+                        <input style='width:150px;' type="range"  id="temp" min=-5 max=2 step=0.000001 value=0 oninput='update_temp()' onchange="update_temp()"></input>
                         <label class='eb_label' for="temp" title="Temperature">Temperature</label>
                         <br>
 
